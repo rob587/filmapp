@@ -1,8 +1,10 @@
-// schermata film dettalgio
 import React from "react";
+import { Text, View } from "react-native";
 
-const details = () => {
-  return <div></div>;
-};
-
-export default details;
+export default function details() {
+  return (
+    <View>
+      <Text>details</Text>
+    </View>
+  );
+}

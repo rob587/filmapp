@@ -1,7 +1,10 @@
 import React from "react";
+import { Text, View } from "react-native";
 
-const ricerca = () => {
-  return <div></div>;
-};
-
-export default ricerca;
+export default function ricerca() {
+  return (
+    <View>
+      <Text>ricerca</Text>
+    </View>
+  );
+}

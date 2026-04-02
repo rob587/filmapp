@@ -1,7 +1,10 @@
 import React from "react";
+import { Text, View } from "react-native";
 
-const preferiti = () => {
-  return <div></div>;
-};
-
-export default preferiti;
+export default function preferiti() {
+  return (
+    <View>
+      <Text>preferiti</Text>
+    </View>
+  );
+}
