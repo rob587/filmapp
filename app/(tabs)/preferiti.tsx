@@ -1,12 +1,28 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useFocusEffect } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import React, { useCallback, useState } from "react";
-import { Text, View } from "react-native";
+import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 
 const IMAGE_BASE = "https://image.tmdb.org/t/p/w200";
 
+interface Film {
+  id: number;
+  title: string;
+  overview: string;
+  poster_path: string | null;
+  backdrop_path: string | null;
+  vote_average: number;
+  vote_count: number;
+  release_date: string;
+  original_language: string;
+  popularity: number;
+  adult: boolean;
+  video: boolean;
+  genre_ids: number[];
+}
+
 export default function preferiti() {
-  const [preferiti, setPreferiti] = useState([]);
+  const [preferiti, setPreferiti] = useState<Film[]>([]);
 
   useFocusEffect(
     useCallback(() => {
@@ -29,7 +45,20 @@ export default function preferiti() {
 
   return (
     <View>
-      <Text>preferiti</Text>
+      <FlatList
+        data={preferiti}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            onPress={() => router.push(`/details?id=${item.id}`)}
+          >
+            <Image source={{ uri: `${IMAGE_BASE}${item.poster_path}` }} />
+            <View>
+              <Text>{item.title}</Text>
+            </View>
+          </TouchableOpacity>
+        )}
+      />
     </View>
   );
 }
