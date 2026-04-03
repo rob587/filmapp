@@ -1,7 +1,14 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router, useFocusEffect } from "expo-router";
 import React, { useCallback, useState } from "react";
-import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
+import {
+  Alert,
+  FlatList,
+  Image,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 const IMAGE_BASE = "https://image.tmdb.org/t/p/w200";
 
@@ -26,13 +33,31 @@ export default function preferiti() {
 
   useFocusEffect(
     useCallback(() => {
-      loadPreferiti;
+      loadPreferiti();
     }, []),
   );
 
   const loadPreferiti = async () => {
     const filmSalvato = await AsyncStorage.getItem("preferiti");
     if (filmSalvato) setPreferiti(JSON.parse(filmSalvato));
+  };
+
+  const rimuoviPreferiti = async (film: Film) => {
+    Alert.alert("Rimuovi dai preferiti", `Vuoi rimuovere "${film.title}"?`, [
+      { text: "Annulla", style: "cancel" },
+      {
+        text: "Rimuovi",
+        style: "destructive",
+        onPress: async () => {
+          const nuoviPreferiti = preferiti.filter((f) => f.id !== film.id);
+          setPreferiti(nuoviPreferiti);
+          await AsyncStorage.setItem(
+            "preferiti",
+            JSON.stringify(nuoviPreferiti),
+          );
+        },
+      },
+    ]);
   };
 
   if (preferiti.length === 0) {
