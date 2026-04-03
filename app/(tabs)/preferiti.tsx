@@ -19,6 +19,14 @@ export default function preferiti() {
     if (filmSalvato) setPreferiti(JSON.parse(filmSalvato));
   };
 
+  if (preferiti.length === 0) {
+    return (
+      <View>
+        <Text>❤️ Nessun preferito</Text>
+      </View>
+    );
+  }
+
   return (
     <View>
       <Text>preferiti</Text>
