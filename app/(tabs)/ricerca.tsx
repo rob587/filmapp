@@ -14,12 +14,28 @@ import { router } from "expo-router";
 const API_KEY = process.env.EXPO_PUBLIC_TMDB_API_KEY;
 const IMAGE_BASE = "https://image.tmdb.org/t/p/w200";
 
-export default function ricerca() {
+interface Film {
+  id: number;
+  title: string;
+  overview: string;
+  poster_path: string | null;
+  backdrop_path: string | null;
+  vote_average: number;
+  vote_count: number;
+  release_date: string;
+  original_language: string;
+  popularity: number;
+  adult: boolean;
+  video: boolean;
+  genre_ids: number[];
+}
+
+export default function Ricerca() {
   // stati generali
 
-  const [query, setQuery] = useState("");
-  const [results, setResults] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [query, setQuery] = useState<string>("");
+  const [results, setResults] = useState<Film[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   // funzione per cercare il film con gestione degli errori
 
