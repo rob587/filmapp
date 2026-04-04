@@ -44,6 +44,28 @@ const usePreferiti = () => {
     [preferiti],
   );
 
+  const aggiungiPreferiti = useCallback(
+    async (film: Film) => {
+      try {
+        const esiste = preferiti.some((f) => f.id === film.id);
+        if (!esiste) {
+          const nuoviPreferiti = [...preferiti, film];
+          setPreferiti(nuoviPreferiti);
+          await AsyncStorage.setItem(
+            "preferiti",
+            JSON.stringify(nuoviPreferiti),
+          );
+          return true;
+        }
+        return false;
+      } catch (error) {
+        console.error("errore nell'aggiunta:", error);
+        return false;
+      }
+    },
+    [preferiti],
+  );
+
   return (
     <View>
       <Text>usePreferiti</Text>
