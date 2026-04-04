@@ -37,7 +37,7 @@ const usePreferiti = () => {
 
   // check per vedere se c'è il film
 
-  const ifPreferito = useCallback(
+  const isPreferito = useCallback(
     (filmId: number) => {
       return preferiti.some((f) => f.id === filmId);
     },
@@ -79,6 +79,19 @@ const usePreferiti = () => {
       }
     },
     [preferiti],
+  );
+
+  const togglePreferito = useCallback(
+    async (film: Film) => {
+      if (isPreferito(film.id)) {
+        await rimuoviPreferiti(film.id);
+        return false;
+      } else {
+        await aggiungiPreferiti(film);
+        return true;
+      }
+    },
+    [isPreferito, aggiungiPreferiti, rimuoviPreferiti],
   );
 
   return (
