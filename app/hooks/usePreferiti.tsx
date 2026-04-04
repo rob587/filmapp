@@ -66,6 +66,21 @@ const usePreferiti = () => {
     [preferiti],
   );
 
+  const rimuoviPreferiti = useCallback(
+    async (filmId: number) => {
+      try {
+        const nuoviPreferiti = preferiti.filter((f) => f.id !== filmId);
+        setPreferiti(nuoviPreferiti);
+        await AsyncStorage.setItem("preferiti", JSON.stringify(nuoviPreferiti));
+        return true;
+      } catch (error) {
+        console.error("errore nella rimozione del film", error);
+        return false;
+      }
+    },
+    [preferiti],
+  );
+
   return (
     <View>
       <Text>usePreferiti</Text>
