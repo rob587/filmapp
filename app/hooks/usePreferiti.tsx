@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import React, { useCallback, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { useFocusEffect } from "expo-router";
+import { useCallback, useState } from "react";
 interface Film {
   id: number;
   title: string;
@@ -94,13 +94,21 @@ const usePreferiti = () => {
     [isPreferito, aggiungiPreferiti, rimuoviPreferiti],
   );
 
-  return (
-    <View>
-      <Text>usePreferiti</Text>
-    </View>
+  useFocusEffect(
+    useCallback(() => {
+      caricaPreferiti();
+    }, [caricaPreferiti]),
   );
+
+  return {
+    preferiti,
+    loading,
+    isPreferito,
+    aggiungiPreferiti,
+    rimuoviPreferiti,
+    togglePreferito,
+    caricaPreferiti,
+  };
 };
 
 export default usePreferiti;
-
-const styles = StyleSheet.create({});
