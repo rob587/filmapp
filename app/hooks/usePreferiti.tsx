@@ -35,6 +35,15 @@ const usePreferiti = () => {
     }
   }, []);
 
+  // check per vedere se c'è il film
+
+  const ifPreferito = useCallback(
+    (filmId: number) => {
+      return preferiti.some((f) => f.id === filmId);
+    },
+    [preferiti],
+  );
+
   return (
     <View>
       <Text>usePreferiti</Text>
