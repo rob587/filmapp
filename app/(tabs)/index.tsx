@@ -2,6 +2,7 @@ import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
+  Alert,
   Dimensions,
   FlatList,
   Image,
@@ -10,6 +11,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import usePreferiti from "../hooks/usePreferiti";
 
 const { width } = Dimensions.get("window");
 const CARD_WIDTH = (width - 48) / 2;
@@ -37,6 +39,8 @@ export default function Index() {
   const [film, setFilm] = useState<Film[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const { isPreferito, togglePreferito } = usePreferiti();
+
   useEffect(() => {
     fetch(
       `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=it-IT&page=1`,
@@ -54,6 +58,17 @@ export default function Index() {
   }, []);
   const goToDettaglio = (movieId: number) => {
     router.push(`/details?id=${movieId}`);
+  };
+
+  const handlePreferito = async (film: Film, event: any) => {
+    event.stopPropagation();
+    const aggiunto = await togglePreferito(film);
+    Alert.alert(
+      aggiunto ? "✅ Aggiunto!" : "❌ Rimosso!",
+      aggiunto
+        ? `${film.title} è stato aggiunto ai preferiti`
+        : `${film.title} è stato rimosso dai preferiti`,
+    );
   };
 
   const renderCard = ({ item }: { item: Film }) => (
@@ -79,6 +94,14 @@ export default function Index() {
             ⭐ {item.vote_average?.toFixed(1)}
           </Text>
         </View>
+        <TouchableOpacity
+          style={styles.favoriteButton}
+          onPress={(e) => handlePreferito(item, e)}
+        >
+          <Text style={styles.favoriteIcon}>
+            {isPreferito(item.id) ? "❤️" : "🤍"}
+          </Text>
+        </TouchableOpacity>
       </View>
 
       <View style={styles.infoContainer}>
@@ -198,7 +221,7 @@ const styles = StyleSheet.create({
   posterContainer: {
     position: "relative",
     width: "100%",
-    height: CARD_WIDTH * 1.5, // Ratio 2:3 per poster
+    height: CARD_WIDTH * 1.5,
   },
   poster: {
     width: "100%",
@@ -226,6 +249,24 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 4,
   },
+
+  favoriteButton: {
+    position: "absolute",
+    bottom: 8,
+    right: 8,
+    backgroundColor: "rgba(0,0,0,0.75)",
+    padding: 8,
+    borderRadius: 30,
+    width: 40,
+    height: 40,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  favoriteIcon: {
+    fontSize: 20,
+  },
+
   ratingText: {
     color: "#fbbf24",
     fontSize: 12,
